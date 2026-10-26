@@ -10,3 +10,7 @@ export const STORAGE_KEYS = {
 // Límites de longitud para el nombre de usuario
 export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 15;
+
+// Parámetros de búsqueda de Pokémon
+export const SEARCH_MAX_RESULTS = 8;
+export const SEARCH_DEBOUNCE_MS = 300;
