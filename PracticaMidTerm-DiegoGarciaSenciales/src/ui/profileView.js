@@ -2,6 +2,63 @@ import { fetchPokemonNames, fetchPokemonDetail } from "../services/pokeapi.js";
 import { validateUsername } from "../utils/validators.js";
 import { SEARCH_MAX_RESULTS, SEARCH_DEBOUNCE_MS } from "../utils/constants.js";
 
+let selectedPokemon = null;
+let debounceTimeoutId = null;
+
+/**
+ * Restablece los campos de texto, la lista de coincidencias, la vista previa,
+ * los mensajes de error y olvida el Pokémon elegido en la vista de perfil.
+ */
+export function resetProfileView() {
+  selectedPokemon = null;
+
+  if (debounceTimeoutId) {
+    clearTimeout(debounceTimeoutId);
+    debounceTimeoutId = null;
+  }
+
+  const usernameInput = document.getElementById("username-input");
+  if (usernameInput) {
+    usernameInput.value = "";
+  }
+
+  const pokemonSearchInput = document.getElementById("pokemon-search-input");
+  if (pokemonSearchInput) {
+    pokemonSearchInput.value = "";
+  }
+
+  const pokemonMatchesList = document.getElementById("pokemon-matches-list");
+  if (pokemonMatchesList) {
+    pokemonMatchesList.innerHTML = "";
+  }
+
+  const pokemonPreviewImage = document.getElementById("pokemon-preview-image");
+  if (pokemonPreviewImage) {
+    pokemonPreviewImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+    pokemonPreviewImage.alt = "Vista previa del Pokémon seleccionado";
+  }
+
+  const pokemonPreviewName = document.getElementById("pokemon-preview-name");
+  if (pokemonPreviewName) {
+    pokemonPreviewName.textContent = "";
+  }
+
+  const usernameError = document.getElementById("username-error");
+  if (usernameError) {
+    usernameError.textContent = "";
+  }
+
+  const pokemonError = document.getElementById("pokemon-error");
+  if (pokemonError) {
+    pokemonError.textContent = "";
+  }
+
+  const generalError = document.getElementById("profile-general-error");
+  if (generalError) {
+    generalError.textContent = "";
+  }
+}
+
 /**
  * Inicializa la vista del formulario de perfil de jugador.
  * @param {Function} onProfileCreated - Callback invocado con los datos del perfil al crearse exitosamente.
@@ -22,8 +79,6 @@ export async function initProfileView(onProfileCreated) {
   const generalError = document.getElementById("profile-general-error");
 
   let pokemonNames = [];
-  let selectedPokemon = null;
-  let debounceTimeoutId = null;
 
   function showGeneralError(message) {
     if (generalError) {
