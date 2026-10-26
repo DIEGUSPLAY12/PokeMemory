@@ -37,7 +37,17 @@
           <button type="submit" id="profile-submit-btn">Crear perfil</button>
         </form>
       </section>
-      <section id="game-section"></section>
+      <section id="game-section" hidden>
+        <header id="game-header" class="game-header">
+          <div class="player-info">
+            <span id="player-username"></span>
+            <img id="player-pokemon-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Pokémon favorito del jugador">
+            <span id="player-pokemon-name"></span>
+          </div>
+          <button type="button" id="logout-btn">Cerrar sesión</button>
+        </header>
+        <div id="game-area"></div>
+      </section>
       <section id="ranking-section"></section>
     </main>
     <script type="module" src="/src/main.js"></script>
