@@ -6,3 +6,7 @@ export const STORAGE_KEYS = {
   PROFILE: "pokememory-profile",
   HISTORY: "pokememory-history",
 };
+
+// Límites de longitud para el nombre de usuario
+export const USERNAME_MIN_LENGTH = 3;
+export const USERNAME_MAX_LENGTH = 15;

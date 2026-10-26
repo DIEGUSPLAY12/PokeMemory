@@ -10,7 +10,30 @@
       <h1>PokeMemory</h1>
     </header>
     <main>
-      <section id="profile-section"></section>
+      <section id="profile-section">
+        <form id="profile-form">
+          <h2>Perfil del Jugador</h2>
+
+          <div class="form-group">
+            <label for="username-input">Nombre de usuario</label>
+            <input type="text" id="username-input" name="username" autocomplete="off">
+            <p id="username-error" class="error-message"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="pokemon-search-input">Buscar Pokémon</label>
+            <input type="text" id="pokemon-search-input" name="pokemon-search" autocomplete="off" placeholder="Buscar Pokémon...">
+            <ul id="pokemon-matches-list"></ul>
+          </div>
+
+          <div id="pokemon-preview-container">
+            <img id="pokemon-preview-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Vista previa del Pokémon seleccionado">
+            <span id="pokemon-preview-name"></span>
+          </div>
+
+          <button type="submit" id="profile-submit-btn">Crear perfil</button>
+        </form>
+      </section>
       <section id="game-section"></section>
       <section id="ranking-section"></section>
     </main>
