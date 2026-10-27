@@ -14,3 +14,6 @@ export const USERNAME_MAX_LENGTH = 15;
 // Parámetros de búsqueda de Pokémon
 export const SEARCH_MAX_RESULTS = 8;
 export const SEARCH_DEBOUNCE_MS = 300;
+
+// Retardo para voltear cartas que no coinciden en el juego (ms)
+export const MISMATCH_DELAY_MS = 1000;
