@@ -46,7 +46,16 @@
           </div>
           <button type="button" id="logout-btn">Cerrar sesión</button>
         </header>
-        <div id="game-area"></div>
+        <div id="game-area">
+          <form id="game-setup-form">
+            <div class="form-group">
+              <label for="card-count-input">Número de cartas:</label>
+              <input type="text" id="card-count-input" name="card-count" inputmode="numeric" autocomplete="off">
+              <p id="card-count-error" class="error-message"></p>
+            </div>
+            <button type="submit" id="start-game-btn">Empezar partida</button>
+          </form>
+        </div>
       </section>
       <section id="ranking-section"></section>
     </main>

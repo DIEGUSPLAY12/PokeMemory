@@ -1,7 +1,8 @@
 import "./styles/main.css";
 import { getProfile, saveProfile, clearProfile } from "./storage/sessionStore.js";
 import { initProfileView, resetProfileView } from "./ui/profileView.js";
-import { renderPlayerHeader } from "./ui/gameView.js";
+import { renderPlayerHeader, initGameSetup } from "./ui/gameView.js";
+import { startGame } from "./game/gameController.js";
 
 const profileSection = document.getElementById("profile-section");
 const gameSection = document.getElementById("game-section");
@@ -28,6 +29,8 @@ initProfileView((profile) => {
   saveProfile(profile);
   showGameScreen(profile);
 });
+
+initGameSetup(startGame);
 
 const currentProfile = getProfile();
 if (currentProfile) {
