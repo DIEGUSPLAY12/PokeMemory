@@ -1,0 +1,73 @@
+/* Tablero de juego */
+#board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+  max-width: 800px;
+}
+
+/* Carta */
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover:not(.card--matched) {
+  transform: translateY(-2px);
+  border-color: #999;
+}
+
+/* Frente y reverso de la carta */
+.card .card-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #d32f2f;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+.card .card-front {
+  display: none;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Estado volteada */
+.card.card--flipped .card-back {
+  display: none;
+}
+
+.card.card--flipped .card-front {
+  display: block;
+}
+
+/* Estado emparejada */
+.card.card--matched {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+  cursor: default;
+}
+
+.card.card--matched .card-back {
+  display: none;
+}
+
+.card.card--matched .card-front {
+  display: block;
+  opacity: 0.85;
+}

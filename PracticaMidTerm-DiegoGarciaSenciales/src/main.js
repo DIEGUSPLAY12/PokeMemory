@@ -2,7 +2,7 @@ import "./styles/main.css";
 import { getProfile, saveProfile, clearProfile } from "./storage/sessionStore.js";
 import { initProfileView, resetProfileView } from "./ui/profileView.js";
 import { renderPlayerHeader, initGameSetup } from "./ui/gameView.js";
-import { startGame } from "./game/gameController.js";
+import { startGame, cancelGame } from "./game/gameController.js";
 
 const profileSection = document.getElementById("profile-section");
 const gameSection = document.getElementById("game-section");
@@ -20,6 +20,7 @@ function showProfileScreen() {
 }
 
 logoutBtn?.addEventListener("click", () => {
+  cancelGame();
   clearProfile();
   resetProfileView();
   showProfileScreen();
