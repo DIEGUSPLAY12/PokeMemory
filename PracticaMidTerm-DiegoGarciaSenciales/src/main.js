@@ -2,6 +2,7 @@ import "./styles/main.css";
 import { getProfile, saveProfile, clearProfile } from "./storage/sessionStore.js";
 import { initProfileView, resetProfileView } from "./ui/profileView.js";
 import { renderPlayerHeader, initGameSetup } from "./ui/gameView.js";
+import { renderRanking } from "./ui/rankingView.js";
 import { startGame, cancelGame } from "./game/gameController.js";
 
 const profileSection = document.getElementById("profile-section");
@@ -32,6 +33,7 @@ initProfileView((profile) => {
 });
 
 initGameSetup(startGame);
+renderRanking();
 
 const currentProfile = getProfile();
 if (currentProfile) {

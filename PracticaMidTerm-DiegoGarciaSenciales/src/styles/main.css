@@ -71,3 +71,37 @@
   display: block;
   opacity: 0.85;
 }
+
+/* Tabla de ranking */
+.ranking-table {
+  width: 100%;
+  max-width: 800px;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.ranking-table th,
+.ranking-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.ranking__row--highlight {
+  background-color: #fff9c4;
+  font-weight: bold;
+}
+
+.ranking__row--omitted td {
+  text-align: center;
+  color: #777;
+  letter-spacing: 2px;
+}
+
+.ranking__pokemon-img {
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+  margin-right: 6px;
+  object-fit: contain;
+}
