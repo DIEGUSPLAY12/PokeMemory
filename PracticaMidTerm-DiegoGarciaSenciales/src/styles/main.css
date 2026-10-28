@@ -47,7 +47,7 @@
   object-fit: contain;
 }
 
-/* Estado volteada */
+/* Estado girada */
 .card.card--flipped .card-back {
   display: none;
 }

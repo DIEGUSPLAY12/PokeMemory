@@ -186,3 +186,14 @@ export function hideGameFinished() {
     finishedElement.hidden = true;
   }
 }
+
+/**
+ * Renderiza el tiempo formateado en el elemento #timer.
+ * @param {string} text
+ */
+export function renderTimer(text = "") {
+  const timerElement = document.getElementById("timer");
+  if (timerElement) {
+    timerElement.textContent = text;
+  }
+}
