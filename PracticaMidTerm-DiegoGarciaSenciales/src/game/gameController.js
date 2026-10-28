@@ -1,5 +1,6 @@
 import { fetchRandomPokemons } from "../services/pokeapi.js";
 import { createCards, createGameState, selectCard, resolveMismatch } from "./gameLogic.js";
+import { startTimer, stopTimer, formatTime } from "./timer.js";
 import { MISMATCH_DELAY_MS } from "../utils/constants.js";
 import {
   renderBoard,
@@ -8,6 +9,7 @@ import {
   showMessage,
   showGameFinished,
   hideGameFinished,
+  renderTimer,
 } from "../ui/gameView.js";
 
 let gameToken = 0;
@@ -37,6 +39,9 @@ function setupRestartButton() {
  */
 export async function startGame(cardCount) {
   setupRestartButton();
+
+  stopTimer();
+  renderTimer(formatTime(0));
 
   gameToken++;
   const currentToken = gameToken;
@@ -82,6 +87,10 @@ export async function startGame(cardCount) {
 
   renderBoard(currentGameState.cards, handleCardClick);
 
+  startTimer((seconds) => {
+    renderTimer(formatTime(seconds));
+  });
+
   const restartBtn = document.getElementById("restart-button");
   if (restartBtn) {
     restartBtn.disabled = false;
@@ -106,6 +115,7 @@ function handleCardClick(index) {
   if (result === "flipped" || result === "match") {
     updateBoard(currentGameState.cards);
     if (currentGameState.isFinished) {
+      stopTimer();
       showGameFinished();
     }
   } else if (result === "mismatch") {
@@ -127,6 +137,9 @@ export function cancelGame() {
     clearTimeout(pendingTimeoutId);
     pendingTimeoutId = null;
   }
+
+  stopTimer();
+  renderTimer(formatTime(0));
 
   currentGameState = null;
   clearBoard();
