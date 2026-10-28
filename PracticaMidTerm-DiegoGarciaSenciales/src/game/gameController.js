@@ -13,6 +13,7 @@ import {
   hideGameFinished,
   renderTimer,
 } from "../ui/gameView.js";
+import { renderRanking } from "../ui/rankingView.js";
 
 export let lastResultId = null;
 
@@ -46,6 +47,7 @@ export async function startGame(cardCount) {
 
   stopTimer();
   renderTimer(formatTime(0));
+  renderRanking();
 
   gameToken++;
   const currentToken = gameToken;
@@ -136,7 +138,7 @@ function handleCardClick(index) {
           cards: currentGameState.cards.length,
         });
         lastResultId = savedResult?.id || null;
-        // Refrescar ranking en la siguiente fase
+        renderRanking(lastResultId);
       }
     }
   } else if (result === "mismatch") {

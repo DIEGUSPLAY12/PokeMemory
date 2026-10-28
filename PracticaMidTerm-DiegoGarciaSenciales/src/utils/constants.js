@@ -17,3 +17,6 @@ export const SEARCH_DEBOUNCE_MS = 300;
 
 // Retardo para voltear cartas que no coinciden en el juego (ms)
 export const MISMATCH_DELAY_MS = 1000;
+
+// Cantidad máxima de filas visibles por defecto en el ranking
+export const RANKING_VISIBLE_ROWS = 5;
