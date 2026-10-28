@@ -1,6 +1,8 @@
 import { fetchRandomPokemons } from "../services/pokeapi.js";
 import { createCards, createGameState, selectCard, resolveMismatch } from "./gameLogic.js";
-import { startTimer, stopTimer, formatTime } from "./timer.js";
+import { startTimer, stopTimer, formatTime, getElapsedSeconds } from "./timer.js";
+import { getProfile } from "../storage/sessionStore.js";
+import { addResult } from "../storage/historyStore.js";
 import { MISMATCH_DELAY_MS } from "../utils/constants.js";
 import {
   renderBoard,
@@ -11,6 +13,8 @@ import {
   hideGameFinished,
   renderTimer,
 } from "../ui/gameView.js";
+
+export let lastResultId = null;
 
 let gameToken = 0;
 let pendingTimeoutId = null;
@@ -117,6 +121,23 @@ function handleCardClick(index) {
     if (currentGameState.isFinished) {
       stopTimer();
       showGameFinished();
+
+      if (!currentGameState.resultSaved) {
+        currentGameState.resultSaved = true;
+        const profile = getProfile();
+        const savedResult = addResult({
+          username: profile?.username || "",
+          favoritePokemon: {
+            id: profile?.pokemonId,
+            name: profile?.pokemonName,
+            image: profile?.pokemonImage,
+          },
+          timeSeconds: getElapsedSeconds(),
+          cards: currentGameState.cards.length,
+        });
+        lastResultId = savedResult?.id || null;
+        // Refrescar ranking en la siguiente fase
+      }
     }
   } else if (result === "mismatch") {
     updateBoard(currentGameState.cards);

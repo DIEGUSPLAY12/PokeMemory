@@ -37,7 +37,7 @@ export function createCards(pokemons = []) {
 /**
  * Crea el estado inicial del juego a partir de la baraja de cartas.
  * @param {Array} cards
- * @returns {{ cards: Array, selectedIndexes: Array<number>, isChecking: boolean, isFinished: boolean }}
+ * @returns {{ cards: Array, selectedIndexes: Array<number>, isChecking: boolean, isFinished: boolean, resultSaved: boolean }}
  */
 export function createGameState(cards = []) {
   return {
@@ -45,6 +45,7 @@ export function createGameState(cards = []) {
     selectedIndexes: [],
     isChecking: false,
     isFinished: false,
+    resultSaved: false,
   };
 }
 
