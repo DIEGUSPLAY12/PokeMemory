@@ -147,11 +147,19 @@ button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-button:disabled {
-  background-color: var(--color-gray-300);
-  color: var(--color-gray-500);
+button:disabled,
+#restart-button:disabled {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-300);
   cursor: not-allowed;
-  border-color: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+button:disabled:hover,
+#restart-button:disabled:hover {
+  background-color: var(--color-gray-200);
   transform: none;
 }
 
@@ -196,7 +204,8 @@ label {
   color: var(--color-gray-700);
 }
 
-input[type="text"] {
+input[type="text"],
+select {
   width: 100%;
   padding: 10px 12px;
   font-family: inherit;
@@ -209,7 +218,8 @@ input[type="text"] {
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus,
+select:focus {
   background-color: var(--color-white);
   border-color: var(--color-pokemon-blue);
   box-shadow: 0 0 0 3px rgba(42, 117, 187, 0.2);
@@ -483,6 +493,57 @@ input[type="text"]:focus {
 /* ==========================================================================
    12. TABLA DE RANKING (Ranking Table)
    ========================================================================== */
+.ranking-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-gray-50);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+}
+
+.ranking-control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 140px;
+  min-width: 130px;
+}
+
+.ranking-control-item label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-gray-700);
+}
+
+.ranking-control-item input,
+.ranking-control-item select {
+  height: 38px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+.ranking-control-item--btn {
+  flex: 0 0 auto;
+}
+
+#ranking-clear-filters-btn {
+  height: 38px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  background-color: var(--color-gray-700);
+  color: var(--color-white);
+  border: var(--border-width) solid transparent;
+  white-space: nowrap;
+}
+
+#ranking-clear-filters-btn:hover:not(:disabled) {
+  background-color: var(--color-gray-900);
+}
+
 #ranking-container {
   width: 100%;
   overflow-x: auto;
@@ -561,6 +622,16 @@ input[type="text"]:focus {
   padding: 8px 12px;
 }
 
+/* Fila de aviso cuando no hay partidas que coincidan */
+.ranking-table tbody tr.ranking__row--no-matches td {
+  text-align: center;
+  color: var(--color-gray-500);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 24px 14px;
+  background-color: transparent;
+}
+
 /* Imagen y nombre del Pokémon en el ranking */
 .ranking__pokemon-img {
   width: 28px;
@@ -569,6 +640,18 @@ input[type="text"]:focus {
   margin-right: var(--spacing-xs);
   object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
+/* Botón Ver más del ranking */
+#ranking-load-more-btn,
+.ranking__load-more-btn {
+  display: flex;
+  margin: var(--spacing-md) auto 0;
+}
+
+#ranking-load-more-btn[hidden],
+.ranking__load-more-btn[hidden] {
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -626,12 +709,28 @@ input[type="text"]:focus {
     font-size: 1.15rem;
     padding: 12px 14px;
   }
+
+  /* Barra de controles apilada verticalmente en móvil */
+  .ranking-controls {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--spacing-sm);
+  }
+
+  .ranking-control-item {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  #ranking-clear-filters-btn {
+    width: 100%;
+  }
 }
 
 /* Tablet: pantallas entre 600px y 1023px */
 @media (min-width: 600px) and (max-width: 1023px) {
   main {
-    max-width: 680px;
+    max-width: 760px;
   }
 
   #board {
@@ -643,23 +742,16 @@ input[type="text"]:focus {
 /* Escritorio: pantallas de 1024px o más */
 @media (min-width: 1024px) {
   main {
-    max-width: 1120px;
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    align-items: start;
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
     gap: var(--spacing-xl);
   }
 
-  /* Columna izquierda: perfil o juego activo */
+  /* Todas las secciones apiladas con el mismo ancho centrado */
   #profile-section,
-  #game-section {
-    grid-column: 1;
-  }
-
-  /* Columna derecha: ranking siempre visible al lado */
+  #game-section,
   #ranking-section {
-    grid-column: 2;
-    position: sticky;
-    top: var(--spacing-lg);
+    width: 100%;
   }
-}
+}
