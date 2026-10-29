@@ -2,7 +2,7 @@
    1. VARIABLES DE TEMA POKÉMON (:root)
    ========================================================================== */
 :root {
-  /* Colores oficiales de Pokémon requeridos */
+
   --poke-yellow: #FFCB05;
   --poke-blue: #3D7DCA;
   --poke-blue-dark: #003A70;
@@ -10,11 +10,11 @@
   --pokeball-white: #F0F0F0;
   --pokeball-black: #222224;
 
-  /* Variantes de tono para botones e interactividad */
+
   --pokeball-red-hover: #C60D0D;
   --color-white: #FFFFFF;
 
-  /* Escala de grises neutros para fondos secundarios, bordes y deshabilitados */
+
   --color-gray-50: #F8FAFC;
   --color-gray-100: #F1F5F9;
   --color-gray-200: #E2E8F0;
@@ -23,30 +23,27 @@
   --color-gray-700: #334155;
   --color-gray-900: #0F172A;
 
-  /* Estados contextuales de éxito */
+
   --color-success: #16A34A;
   --color-success-bg: #DCFCE7;
   --color-success-dark: #15803D;
-
-  /* Anillo de foco accesible con acento amarillo */
   --focus-ring: rgba(255, 203, 5, 0.45);
 
-  /* Sombras */
+
   --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 6px 12px rgba(0, 58, 112, 0.25);
 
-  /* Tipografía del sistema */
+
   --font-family-system: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 
-  /* Espaciados */
+
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
-  /* Bordes y radios */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -83,7 +80,7 @@ main {
 /* ==========================================================================
    3. CABECERA Y TÍTULOS (Header & Headings)
    ========================================================================== */
-body > header {
+body>header {
   text-align: center;
   margin-bottom: var(--spacing-md);
 }
