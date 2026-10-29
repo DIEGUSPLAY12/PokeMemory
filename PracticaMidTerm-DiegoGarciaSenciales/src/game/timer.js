@@ -1,3 +1,5 @@
+import { TIMER_INTERVAL_MS } from "../utils/constants.js";
+
 let intervalId = null;
 let startTime = null;
 let elapsedSeconds = 0;
@@ -17,11 +19,11 @@ export function startTimer(onTick) {
   }
 
   intervalId = setInterval(() => {
-    elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+    elapsedSeconds = Math.floor((Date.now() - startTime) / TIMER_INTERVAL_MS);
     if (typeof onTick === "function") {
       onTick(elapsedSeconds);
     }
-  }, 1000);
+  }, TIMER_INTERVAL_MS);
 }
 
 /**
@@ -30,7 +32,7 @@ export function startTimer(onTick) {
 export function stopTimer() {
   if (intervalId !== null) {
     if (startTime !== null) {
-      elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+      elapsedSeconds = Math.floor((Date.now() - startTime) / TIMER_INTERVAL_MS);
     }
     clearInterval(intervalId);
     intervalId = null;

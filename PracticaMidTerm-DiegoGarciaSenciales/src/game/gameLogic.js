@@ -91,7 +91,7 @@ export function selectCard(state, index) {
       card.isMatched = true;
       state.selectedIndexes = [];
 
-      const allMatched = state.cards.every((item) => item.isMatched);
+      const allMatched = state.cards.every((cardItem) => cardItem.isMatched);
       if (allMatched) {
         state.isFinished = true;
       }

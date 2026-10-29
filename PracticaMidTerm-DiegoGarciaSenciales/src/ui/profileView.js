@@ -1,6 +1,10 @@
 import { fetchPokemonNames, fetchPokemonDetail } from "../services/pokeapi.js";
 import { validateUsername } from "../utils/validators.js";
-import { SEARCH_MAX_RESULTS, SEARCH_DEBOUNCE_MS } from "../utils/constants.js";
+import {
+  SEARCH_MAX_RESULTS,
+  SEARCH_DEBOUNCE_MS,
+  EMPTY_IMAGE_DATA_URI,
+} from "../utils/constants.js";
 
 let selectedPokemon = null;
 let debounceTimeoutId = null;
@@ -34,7 +38,7 @@ export function resetProfileView() {
 
   const pokemonPreviewImage = document.getElementById("pokemon-preview-image");
   if (pokemonPreviewImage) {
-    pokemonPreviewImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+    pokemonPreviewImage.src = EMPTY_IMAGE_DATA_URI;
     pokemonPreviewImage.alt = "Vista previa del Pokémon seleccionado";
   }
 
@@ -166,24 +170,24 @@ export async function initProfileView(onProfileCreated) {
       .slice(0, SEARCH_MAX_RESULTS);
 
     for (const name of matches) {
-      const li = document.createElement("li");
-      li.className = "pokemon-match-item";
-      li.setAttribute("role", "button");
-      li.tabIndex = 0;
-      li.textContent = name;
+      const matchItemElement = document.createElement("li");
+      matchItemElement.className = "pokemon-match-item";
+      matchItemElement.setAttribute("role", "button");
+      matchItemElement.tabIndex = 0;
+      matchItemElement.textContent = name;
 
-      li.addEventListener("click", () => {
+      matchItemElement.addEventListener("click", () => {
         handleSelectPokemon(name);
       });
 
-      li.addEventListener("keydown", (event) => {
+      matchItemElement.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           handleSelectPokemon(name);
         }
       });
 
-      pokemonMatchesList.appendChild(li);
+      pokemonMatchesList.appendChild(matchItemElement);
     }
   }
 

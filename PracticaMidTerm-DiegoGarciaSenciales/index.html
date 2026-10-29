@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PokeMemory</title>
+    <link rel="icon" type="image/png" href="/logo.png">
   </head>
   <body>
     <header>
@@ -64,6 +65,28 @@
       </section>
       <section id="ranking-section">
         <h2>Ranking</h2>
+        <div id="ranking-controls" class="ranking-controls">
+          <div class="ranking-control-item">
+            <label for="ranking-filter-player">Filtrar por jugador</label>
+            <input type="text" id="ranking-filter-player" placeholder="Nombre de jugador..." autocomplete="off">
+          </div>
+          <div class="ranking-control-item">
+            <label for="ranking-filter-cards">Número de cartas</label>
+            <select id="ranking-filter-cards">
+              <option value="all">Todas</option>
+            </select>
+          </div>
+          <div class="ranking-control-item">
+            <label for="ranking-sort-time">Ordenar por tiempo</label>
+            <select id="ranking-sort-time">
+              <option value="asc">Más rápido primero</option>
+              <option value="desc">Más lento primero</option>
+            </select>
+          </div>
+          <div class="ranking-control-item ranking-control-item--btn">
+            <button type="button" id="ranking-clear-filters-btn">Limpiar filtros</button>
+          </div>
+        </div>
         <div id="ranking-container"></div>
       </section>
     </main>
