@@ -1,42 +1,409 @@
-/* Tablero de juego */
-#board {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
-  margin: 20px 0;
-  max-width: 800px;
+/* ==========================================================================
+   1. VARIABLES DE TEMA POKÉMON (:root)
+   ========================================================================== */
+:root {
+  /* Paleta de colores temáticos de Pokémon */
+  --color-pokemon-red: #e3350d;
+  --color-pokemon-red-hover: #b82606;
+  --color-pokemon-blue: #2a75bb;
+  --color-pokemon-blue-hover: #1f5b94;
+  --color-pokemon-yellow: #ffcb05;
+  --color-pokemon-yellow-hover: #e5b600;
+  --color-white: #ffffff;
+
+  /* Escala de grises neutros */
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-500: #64748b;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+
+  /* Estados contextuales */
+  --color-error: #dc2626;
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-highlight: #fef08a;
+
+  /* Tipografía del sistema */
+  --font-family-system: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+
+  /* Espaciados */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Bordes y sombras */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --border-width: 2px;
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
 }
 
-/* Carta */
+/* ==========================================================================
+   2. REINICIO BÁSICO Y CUERPO (Body & Typography)
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: var(--spacing-lg) var(--spacing-md);
+  font-family: var(--font-family-system);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-gray-800);
+  background-color: var(--color-gray-100);
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* ==========================================================================
+   3. CABECERA Y TÍTULOS (Header & Headings)
+   ========================================================================== */
+body > header {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-pokemon-red);
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0 var(--color-pokemon-yellow), 3px 3px 0 var(--color-pokemon-blue);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-pokemon-blue);
+  border-bottom: 2px solid var(--color-gray-200);
+  padding-bottom: var(--spacing-xs);
+}
+
+/* ==========================================================================
+   4. TARJETAS DE SECCIÓN (Cards: Profile, Game & Ranking)
+   ========================================================================== */
+#profile-section,
+#game-section,
+#ranking-section {
+  background-color: var(--color-white);
+  border: var(--border-width) solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-card);
+}
+
+#profile-section[hidden],
+#game-section[hidden],
+#ranking-section[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   5. BOTONES (Buttons: Normal, Hover, Disabled)
+   ========================================================================== */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background-color: var(--color-pokemon-red);
+  color: var(--color-white);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--color-pokemon-red-hover);
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:disabled {
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-500);
+  cursor: not-allowed;
+  border-color: transparent;
+  transform: none;
+}
+
+/* Botón secundario: Reiniciar */
+#restart-button {
+  background-color: var(--color-pokemon-blue);
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+#restart-button:hover:not(:disabled) {
+  background-color: var(--color-pokemon-blue-hover);
+}
+
+/* Botón de logout / cerrar sesión */
+#logout-btn {
+  background-color: transparent;
+  color: var(--color-pokemon-red);
+  border-color: var(--color-pokemon-red);
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+#logout-btn:hover:not(:disabled) {
+  background-color: var(--color-pokemon-red);
+  color: var(--color-white);
+}
+
+/* ==========================================================================
+   6. FORMULARIOS, INPUTS Y LABELS (Form elements)
+   ========================================================================== */
+.form-group {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--color-gray-900);
+  background-color: var(--color-gray-50);
+  border: var(--border-width) solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+input[type="text"]:focus {
+  background-color: var(--color-white);
+  border-color: var(--color-pokemon-blue);
+  box-shadow: 0 0 0 3px rgba(42, 117, 187, 0.2);
+}
+
+/* ==========================================================================
+   7. MENSAJES DE ERROR (Error Messages)
+   ========================================================================== */
+.error-message {
+  margin: var(--spacing-xs) 0 0 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-error);
+}
+
+.error-message:empty {
+  display: none;
+}
+
+/* ==========================================================================
+   8. LISTA DE COINCIDENCIAS DEL BUSCADOR (Pokemon Matches List)
+   ========================================================================== */
+#pokemon-matches-list {
+  list-style: none;
+  margin: var(--spacing-xs) 0 0 0;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+#pokemon-matches-list:empty {
+  display: none;
+}
+
+.pokemon-match-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-gray-100);
+  text-transform: capitalize;
+  font-size: 0.9rem;
+  color: var(--color-gray-800);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.pokemon-match-item:last-child {
+  border-bottom: none;
+}
+
+.pokemon-match-item:hover,
+.pokemon-match-item:focus {
+  background-color: var(--color-pokemon-yellow);
+  color: var(--color-gray-900);
+  font-weight: 600;
+  outline: none;
+}
+
+/* ==========================================================================
+   9. VISTA PREVIA DEL POKÉMON (Pokemon Preview)
+   ========================================================================== */
+#pokemon-preview-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-gray-50);
+  border: 2px dashed var(--color-gray-300);
+  border-radius: var(--radius-md);
+  min-height: 72px;
+}
+
+#pokemon-preview-image {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+#pokemon-preview-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: var(--color-pokemon-blue);
+}
+
+/* ==========================================================================
+   10. CABECERA DEL JUEGO Y ESTADO (Game Header & Status)
+   ========================================================================== */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+#player-username {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+#player-pokemon-image {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+#player-pokemon-name {
+  font-size: 0.9rem;
+  color: var(--color-gray-500);
+  text-transform: capitalize;
+}
+
+#timer {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-pokemon-blue);
+  margin-left: var(--spacing-xs);
+}
+
+#game-status {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-pokemon-blue);
+  margin: var(--spacing-xs) 0;
+}
+
+#game-finished {
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+  border: var(--border-width) solid var(--color-success);
+  border-radius: var(--radius-md);
+}
+
+#game-finished[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   11. TABLERO DE CARTAS (Memory Board & Cards)
+   ========================================================================== */
+#board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+  margin: var(--spacing-lg) 0;
+}
+
 .card {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 4;
-  padding: 8px;
-  box-sizing: border-box;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f0f0;
-  border: 2px solid #ccc;
-  border-radius: 8px;
+  background-color: var(--color-white);
+  border: var(--border-width) solid var(--color-gray-300);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .card:hover:not(.card--matched) {
   transform: translateY(-2px);
-  border-color: #999;
+  border-color: var(--color-pokemon-blue);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Frente y reverso de la carta */
 .card .card-back {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: #d32f2f;
-  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-pokemon-red);
+  font-size: 0.85rem;
   user-select: none;
 }
 
@@ -47,7 +414,7 @@
   object-fit: contain;
 }
 
-/* Estado girada */
+/* Carta girada */
 .card.card--flipped .card-back {
   display: none;
 }
@@ -56,11 +423,12 @@
   display: block;
 }
 
-/* Estado emparejada */
+/* Carta emparejada */
 .card.card--matched {
-  border-color: #4caf50;
-  background-color: #e8f5e9;
+  border-color: var(--color-success);
+  background-color: var(--color-success-bg);
   cursor: default;
+  box-shadow: none;
 }
 
 .card.card--matched .card-back {
@@ -69,39 +437,51 @@
 
 .card.card--matched .card-front {
   display: block;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-/* Tabla de ranking */
+/* ==========================================================================
+   12. TABLA DE RANKING (Ranking Table)
+   ========================================================================== */
 .ranking-table {
   width: 100%;
-  max-width: 800px;
   border-collapse: collapse;
-  margin-top: 16px;
+  margin-top: var(--spacing-md);
+  font-size: 0.95rem;
 }
 
-.ranking-table th,
-.ranking-table td {
-  padding: 8px 12px;
+.ranking-table th {
+  padding: 10px 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  font-weight: 700;
+  color: var(--color-gray-700);
+  background-color: var(--color-gray-50);
+  border-bottom: var(--border-width) solid var(--color-gray-300);
+}
+
+.ranking-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-gray-200);
+  vertical-align: middle;
 }
 
 .ranking__row--highlight {
-  background-color: #fff9c4;
-  font-weight: bold;
+  background-color: var(--color-highlight);
+  font-weight: 700;
 }
 
 .ranking__row--omitted td {
   text-align: center;
-  color: #777;
-  letter-spacing: 2px;
+  color: var(--color-gray-500);
+  font-weight: 700;
+  letter-spacing: 4px;
 }
 
 .ranking__pokemon-img {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   vertical-align: middle;
-  margin-right: 6px;
+  margin-right: var(--spacing-xs);
   object-fit: contain;
-}
+}
