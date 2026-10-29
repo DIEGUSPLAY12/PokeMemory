@@ -335,30 +335,43 @@ input[type="text"]:focus {
 }
 
 #timer {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--color-pokemon-blue);
-  margin-left: var(--spacing-xs);
+  background-color: #e0f2fe;
+  border: 1px solid #7dd3fc;
+  border-radius: 9999px;
+  padding: 4px 12px;
+  margin-left: var(--spacing-sm);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 #game-status {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--color-pokemon-blue);
-  margin: var(--spacing-xs) 0;
+  margin: var(--spacing-sm) 0;
+  min-height: 1.4em;
+}
+
+#game-status:empty {
+  display: none;
 }
 
 #game-finished {
   margin: var(--spacing-md) 0;
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-weight: 700;
-  font-size: 1.1rem;
+  padding: 16px 20px;
+  font-weight: 800;
+  font-size: 1.35rem;
   text-align: center;
-  color: var(--color-success);
-  background-color: var(--color-success-bg);
-  border: var(--border-width) solid var(--color-success);
-  border-radius: var(--radius-md);
+  color: #15803d;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 3px solid #16a34a;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
+  letter-spacing: 0.5px;
 }
 
 #game-finished[hidden] {
@@ -370,7 +383,7 @@ input[type="text"]:focus {
    ========================================================================== */
 #board {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
   gap: 12px;
   margin: var(--spacing-lg) 0;
 }
@@ -378,43 +391,69 @@ input[type="text"]:focus {
 .card {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
-  padding: 6px;
+  aspect-ratio: 1 / 1;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-white);
-  border: var(--border-width) solid var(--color-gray-300);
+  background: linear-gradient(135deg, #1e3a8a 0%, var(--color-pokemon-blue) 100%);
+  border: var(--border-width) solid #1e3a8a;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover:not(.card--matched) {
-  transform: translateY(-2px);
-  border-color: var(--color-pokemon-blue);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Carta oculta: interacción hover */
+.card:hover:not(.card--matched):not(.card--flipped) {
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--color-pokemon-yellow);
+  box-shadow: 0 6px 12px rgba(30, 58, 138, 0.25);
 }
 
+/* Reverso de la carta: diseño Pokéball con CSS */
 .card .card-back {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--color-pokemon-red) 46%, #1e293b 46%, #1e293b 54%, var(--color-white) 54%);
+  border: 3px solid #1e293b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  color: var(--color-pokemon-red);
-  font-size: 0.85rem;
+  font-size: 0;
   user-select: none;
+  position: relative;
+}
+
+.card .card-back::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  border: 3px solid #1e293b;
+  box-shadow: 0 0 0 1px var(--color-white);
 }
 
 .card .card-front {
   display: none;
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-/* Carta girada */
+/* Carta girada: fondo claro y Pokémon visible */
+.card.card--flipped {
+  background: var(--color-white);
+  border-color: var(--color-pokemon-blue);
+  box-shadow: 0 4px 10px rgba(42, 117, 187, 0.2);
+  transform: scale(1.03);
+}
+
 .card.card--flipped .card-back {
   display: none;
 }
@@ -423,11 +462,13 @@ input[type="text"]:focus {
   display: block;
 }
 
-/* Carta emparejada */
+/* Carta emparejada: borde verde, opacidad y cursor bloqueado */
 .card.card--matched {
+  background: var(--color-success-bg);
   border-color: var(--color-success);
-  background-color: var(--color-success-bg);
-  cursor: default;
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
   box-shadow: none;
 }
 
@@ -437,7 +478,6 @@ input[type="text"]:focus {
 
 .card.card--matched .card-front {
   display: block;
-  opacity: 0.9;
 }
 
 /* ==========================================================================
