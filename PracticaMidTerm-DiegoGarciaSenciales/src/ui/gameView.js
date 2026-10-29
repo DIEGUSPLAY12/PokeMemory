@@ -197,3 +197,36 @@ export function renderTimer(text = "") {
     timerElement.textContent = text;
   }
 }
+
+/**
+ * Habilita o deshabilita el botón de empezar partida.
+ * @param {boolean} disabled
+ */
+export function setStartButtonDisabled(disabled) {
+  const startButton = document.getElementById("start-game-btn");
+  if (startButton) {
+    startButton.disabled = disabled;
+  }
+}
+
+/**
+ * Habilita o deshabilita el botón de reiniciar partida.
+ * @param {boolean} disabled
+ */
+export function setRestartButtonDisabled(disabled) {
+  const restartButton = document.getElementById("restart-button");
+  if (restartButton) {
+    restartButton.disabled = disabled;
+  }
+}
+
+/**
+ * Vincula el manejador de clic del botón de reinicio de partida.
+ * @param {Function} onRestart
+ */
+export function initRestartButton(onRestart) {
+  const restartButton = document.getElementById("restart-button");
+  if (restartButton && typeof onRestart === "function") {
+    restartButton.addEventListener("click", onRestart);
+  }
+}

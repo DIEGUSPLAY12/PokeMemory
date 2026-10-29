@@ -39,7 +39,7 @@ export function getVisibleRows(sortedResults = [], highlightedId = null) {
   }
 
   if (highlightedId) {
-    const highlightedIndex = sortedResults.findIndex((r) => r.id === highlightedId);
+    const highlightedIndex = sortedResults.findIndex((result) => result.id === highlightedId);
     if (highlightedIndex !== -1) {
       indicesSet.add(highlightedIndex);
     }
@@ -100,9 +100,9 @@ export function renderRanking(highlightedId = null) {
 
   const headers = ["Posición", "Jugador", "Pokémon", "Tiempo", "Cartas"];
   for (const title of headers) {
-    const th = document.createElement("th");
-    th.textContent = title;
-    headerRow.appendChild(th);
+    const headerCell = document.createElement("th");
+    headerCell.textContent = title;
+    headerRow.appendChild(headerCell);
   }
   thead.appendChild(headerRow);
   table.appendChild(thead);
@@ -110,55 +110,55 @@ export function renderRanking(highlightedId = null) {
   const tbody = document.createElement("tbody");
 
   for (const row of visibleRows) {
-    const tr = document.createElement("tr");
+    const rowElement = document.createElement("tr");
 
     if (row.type === "omitted") {
-      tr.className = "ranking__row--omitted";
-      const td = document.createElement("td");
-      td.colSpan = headers.length;
-      td.textContent = "...";
-      tr.appendChild(td);
+      rowElement.className = "ranking__row--omitted";
+      const omittedCell = document.createElement("td");
+      omittedCell.colSpan = headers.length;
+      omittedCell.textContent = "...";
+      rowElement.appendChild(omittedCell);
     } else {
       if (row.result.id === highlightedId) {
-        tr.className = "ranking__row--highlight";
+        rowElement.className = "ranking__row--highlight";
       }
 
       // 1. Posición
-      const posTd = document.createElement("td");
-      posTd.textContent = String(row.position);
-      tr.appendChild(posTd);
+      const positionCell = document.createElement("td");
+      positionCell.textContent = String(row.position);
+      rowElement.appendChild(positionCell);
 
       // 2. Jugador
-      const userTd = document.createElement("td");
-      userTd.textContent = row.result.username || "";
-      tr.appendChild(userTd);
+      const playerCell = document.createElement("td");
+      playerCell.textContent = row.result.username || "";
+      rowElement.appendChild(playerCell);
 
       // 3. Pokémon (imagen pequeña + nombre)
-      const pokeTd = document.createElement("td");
+      const pokemonCell = document.createElement("td");
       if (row.result.favoritePokemon?.image) {
         const img = document.createElement("img");
         img.className = "ranking__pokemon-img";
         img.src = row.result.favoritePokemon.image;
         img.alt = row.result.favoritePokemon.name || "Pokémon";
-        pokeTd.appendChild(img);
+        pokemonCell.appendChild(img);
       }
       const pokeName = document.createElement("span");
       pokeName.textContent = row.result.favoritePokemon?.name || "";
-      pokeTd.appendChild(pokeName);
-      tr.appendChild(pokeTd);
+      pokemonCell.appendChild(pokeName);
+      rowElement.appendChild(pokemonCell);
 
       // 4. Tiempo
-      const timeTd = document.createElement("td");
-      timeTd.textContent = formatTime(row.result.timeSeconds);
-      tr.appendChild(timeTd);
+      const timeCell = document.createElement("td");
+      timeCell.textContent = formatTime(row.result.timeSeconds);
+      rowElement.appendChild(timeCell);
 
       // 5. Cartas
-      const cardsTd = document.createElement("td");
-      cardsTd.textContent = String(row.result.cards);
-      tr.appendChild(cardsTd);
+      const cardsCell = document.createElement("td");
+      cardsCell.textContent = String(row.result.cards);
+      rowElement.appendChild(cardsCell);
     }
 
-    tbody.appendChild(tr);
+    tbody.appendChild(rowElement);
   }
 
   table.appendChild(tbody);

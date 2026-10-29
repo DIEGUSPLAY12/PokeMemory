@@ -1,4 +1,4 @@
-import { POKEAPI_BASE_URL } from "../utils/constants.js";
+import { POKEAPI_BASE_URL, POKEAPI_NAMES_LIMIT } from "../utils/constants.js";
 
 // Cache en memoria para almacenar la lista de nombres de Pokémon
 let cacheNombres = null;
@@ -9,7 +9,7 @@ export async function fetchPokemonNames() {
     return cacheNombres;
   }
 
-  const respuesta = await fetch(`${POKEAPI_BASE_URL}?limit=100000`);
+  const respuesta = await fetch(`${POKEAPI_BASE_URL}?limit=${POKEAPI_NAMES_LIMIT}`);
   if (!respuesta.ok) {
     throw new Error("No se pudo obtener la lista de Pokémon");
   }

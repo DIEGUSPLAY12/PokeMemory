@@ -7,7 +7,7 @@ import { startGame, cancelGame } from "./game/gameController.js";
 
 const profileSection = document.getElementById("profile-section");
 const gameSection = document.getElementById("game-section");
-const logoutBtn = document.getElementById("logout-btn");
+const logoutButton = document.getElementById("logout-btn");
 
 function showGameScreen(profile) {
   renderPlayerHeader(profile);
@@ -20,7 +20,7 @@ function showProfileScreen() {
   profileSection.hidden = false;
 }
 
-logoutBtn?.addEventListener("click", () => {
+logoutButton?.addEventListener("click", () => {
   cancelGame();
   clearProfile();
   resetProfileView();

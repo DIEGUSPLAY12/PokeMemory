@@ -12,6 +12,9 @@ import {
   showGameFinished,
   hideGameFinished,
   renderTimer,
+  setStartButtonDisabled,
+  setRestartButtonDisabled,
+  initRestartButton,
 } from "../ui/gameView.js";
 import { renderRanking } from "../ui/rankingView.js";
 
@@ -21,21 +24,55 @@ let gameToken = 0;
 let pendingTimeoutId = null;
 let lastCardCount = null;
 let currentGameState = null;
-let isRestartBound = false;
+let isRestartInitialized = false;
 
-function setupRestartButton() {
-  if (isRestartBound) {
+function ensureRestartHandler() {
+  if (isRestartInitialized) {
     return;
   }
-  const restartButton = document.getElementById("restart-button");
-  if (restartButton) {
-    restartButton.addEventListener("click", () => {
-      if (lastCardCount !== null) {
-        startGame(lastCardCount);
-      }
+  initRestartButton(() => {
+    if (lastCardCount !== null) {
+      startGame(lastCardCount);
+    }
+  });
+  isRestartInitialized = true;
+}
+
+/**
+ * Guarda el resultado de la partida en el historial y actualiza el ranking.
+ */
+function handleGameFinished() {
+  stopTimer();
+  showGameFinished();
+
+  if (!currentGameState.resultSaved) {
+    currentGameState.resultSaved = true;
+    const profile = getProfile();
+    const savedResult = addResult({
+      username: profile?.username || "",
+      favoritePokemon: {
+        id: profile?.pokemonId,
+        name: profile?.pokemonName,
+        image: profile?.pokemonImage,
+      },
+      timeSeconds: getElapsedSeconds(),
+      cards: currentGameState.cards.length,
     });
-    isRestartBound = true;
+    lastResultId = savedResult?.id || null;
+    renderRanking(lastResultId);
   }
+}
+
+/**
+ * Programa la vuelta a estado oculto tras un fallo de coincidencia.
+ */
+function handleMismatch() {
+  updateBoard(currentGameState.cards);
+  pendingTimeoutId = setTimeout(() => {
+    pendingTimeoutId = null;
+    resolveMismatch(currentGameState);
+    updateBoard(currentGameState.cards);
+  }, MISMATCH_DELAY_MS);
 }
 
 /**
@@ -43,7 +80,7 @@ function setupRestartButton() {
  * @param {number} cardCount - Número total de cartas (número par).
  */
 export async function startGame(cardCount) {
-  setupRestartButton();
+  ensureRestartHandler();
 
   stopTimer();
   renderTimer(formatTime(0));
@@ -61,10 +98,7 @@ export async function startGame(cardCount) {
   lastCardCount = cardCount;
 
   showMessage("Cargando...");
-  const startBtn = document.getElementById("start-game-btn");
-  if (startBtn) {
-    startBtn.disabled = true;
-  }
+  setStartButtonDisabled(true);
 
   let pokemons;
   try {
@@ -72,9 +106,7 @@ export async function startGame(cardCount) {
   } catch (error) {
     if (currentToken === gameToken) {
       showMessage(error?.message || "Error al cargar los Pokémon. Inténtalo de nuevo.");
-      if (startBtn) {
-        startBtn.disabled = false;
-      }
+      setStartButtonDisabled(false);
     }
     return;
   }
@@ -83,9 +115,7 @@ export async function startGame(cardCount) {
     return;
   }
 
-  if (startBtn) {
-    startBtn.disabled = false;
-  }
+  setStartButtonDisabled(false);
   showMessage("");
 
   const cards = createCards(pokemons);
@@ -97,10 +127,7 @@ export async function startGame(cardCount) {
     renderTimer(formatTime(seconds));
   });
 
-  const restartBtn = document.getElementById("restart-button");
-  if (restartBtn) {
-    restartBtn.disabled = false;
-  }
+  setRestartButtonDisabled(false);
 }
 
 /**
@@ -118,36 +145,21 @@ function handleCardClick(index) {
     return;
   }
 
-  if (result === "flipped" || result === "match") {
+  if (result === "flipped") {
+    updateBoard(currentGameState.cards);
+    return;
+  }
+
+  if (result === "match") {
     updateBoard(currentGameState.cards);
     if (currentGameState.isFinished) {
-      stopTimer();
-      showGameFinished();
-
-      if (!currentGameState.resultSaved) {
-        currentGameState.resultSaved = true;
-        const profile = getProfile();
-        const savedResult = addResult({
-          username: profile?.username || "",
-          favoritePokemon: {
-            id: profile?.pokemonId,
-            name: profile?.pokemonName,
-            image: profile?.pokemonImage,
-          },
-          timeSeconds: getElapsedSeconds(),
-          cards: currentGameState.cards.length,
-        });
-        lastResultId = savedResult?.id || null;
-        renderRanking(lastResultId);
-      }
+      handleGameFinished();
     }
-  } else if (result === "mismatch") {
-    updateBoard(currentGameState.cards);
-    pendingTimeoutId = setTimeout(() => {
-      pendingTimeoutId = null;
-      resolveMismatch(currentGameState);
-      updateBoard(currentGameState.cards);
-    }, MISMATCH_DELAY_MS);
+    return;
+  }
+
+  if (result === "mismatch") {
+    handleMismatch();
   }
 }
 
@@ -169,12 +181,7 @@ export function cancelGame() {
   showMessage("");
   hideGameFinished();
 
-  const startBtn = document.getElementById("start-game-btn");
-  if (startBtn) {
-    startBtn.disabled = false;
-  }
-  const restartBtn = document.getElementById("restart-button");
-  if (restartBtn) {
-    restartBtn.disabled = true;
-  }
+  setStartButtonDisabled(false);
+  setRestartButtonDisabled(true);
 }
+
