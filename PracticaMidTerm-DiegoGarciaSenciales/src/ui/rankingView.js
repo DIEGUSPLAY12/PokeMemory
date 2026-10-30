@@ -240,14 +240,14 @@ export function renderRanking(highlightedId = null, shouldResetLimit = true) {
     return true;
   });
 
-  // 2. Orden elegido por tiempo
+  // 2. Ordenación según rúbrica: 1º mayor número de cartas, 2º según selector de tiempo
   filteredResults.sort((a, b) => {
-    if (a.timeSeconds !== b.timeSeconds) {
-      return timeSortOrder === "desc"
-        ? b.timeSeconds - a.timeSeconds
-        : a.timeSeconds - b.timeSeconds;
+    if (b.cards !== a.cards) {
+      return b.cards - a.cards;
     }
-    return b.cards - a.cards;
+    return timeSortOrder === "desc"
+      ? b.timeSeconds - a.timeSeconds
+      : a.timeSeconds - b.timeSeconds;
   });
 
   const table = document.createElement("table");
