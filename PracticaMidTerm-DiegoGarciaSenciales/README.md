@@ -6,6 +6,6 @@
 | :--- | :--- |
 | **Nombre y apellidos** | Diego García Senciales |
 | **URL de la aplicación desplegada** | [https://diegusplay12.github.io/PokeMemory/](https://diegusplay12.github.io/PokeMemory/) |
-| **Vídeo de demostración** | pendiente |
+| **Vídeo de demostración** | [https://youtu.be/pshQ0qgaVGs](https://youtu.be/pshQ0qgaVGs) |
 
 
